@@ -20,11 +20,13 @@ export const MemberTypeIdEnum = new GraphQLEnumType({
   },
 });
 
+export const MemberId = new GraphQLNonNull(MemberTypeIdEnum);
+
 export const MemberTypeObject = new GraphQLObjectType({
   name: SchemaTypeName.MEMBER_TYPE,
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(MemberTypeIdEnum),
+      type: MemberId,
     },
     discount: {
       type: new GraphQLNonNull(GraphQLFloat),
