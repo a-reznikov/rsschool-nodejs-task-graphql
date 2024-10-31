@@ -1,6 +1,15 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
-import { GraphQLObjectType, GraphQLSchema, GraphQLString, graphql } from 'graphql';
+import {
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLSchema,
+  graphql,
+} from 'graphql';
+import { MemberTypeObject } from './types/member-type.js';
+import { SchemaTypeName } from './constants.js';
+import { Context } from './types/context.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const { prisma } = fastify;
@@ -19,23 +28,26 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         schema,
         source: req.body.query,
         variableValues: req.body.variables,
+        contextValue: {
+          prisma,
+        },
       });
     },
   });
 };
 
-const queryType = new GraphQLObjectType({
-  name: 'Query',
+const rootQuery = new GraphQLObjectType<unknown, Context>({
+  name: SchemaTypeName.ROOT_QUERY_TYPE,
   fields: () => ({
-    testField: {
-      type: GraphQLString,
-      resolve: async () => 'Some test text',
+    memberTypes: {
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(MemberTypeObject))),
+      resolve: async (_source, _args, ctx) => await ctx.prisma.memberType.findMany(),
     },
   }),
 });
 
 export const schema: GraphQLSchema = new GraphQLSchema({
-  query: queryType,
+  query: rootQuery,
 });
 
 export default plugin;
