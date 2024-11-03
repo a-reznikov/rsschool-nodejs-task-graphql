@@ -1,6 +1,5 @@
 import {
   GraphQLBoolean,
-  GraphQLEnumType,
   GraphQLFloat,
   GraphQLInt,
   GraphQLList,
@@ -9,24 +8,10 @@ import {
   GraphQLString,
 } from 'graphql';
 import { SchemaTypeName } from '../constants.js';
-import { MemberTypeId } from '../../member-types/schemas.js';
 import { UUIDType } from './uuid.js';
 import { MemberTypeObject } from './member-type.js';
 import { PostObject } from './post.js';
-
-export const MemberTypeIdEnum = new GraphQLEnumType({
-  name: SchemaTypeName.MEMBER_TYPE_ID,
-  values: {
-    [MemberTypeId.BASIC]: {
-      value: MemberTypeId.BASIC,
-    },
-    [MemberTypeId.BUSINESS]: {
-      value: MemberTypeId.BUSINESS,
-    },
-  },
-});
-
-export const MemberId = new GraphQLNonNull(MemberTypeIdEnum);
+import { Context } from './context.js';
 
 export const ProfileObject = new GraphQLObjectType({
   name: SchemaTypeName.PROFILE,
@@ -46,11 +31,13 @@ export const ProfileObject = new GraphQLObjectType({
   }),
 });
 
-export const UserObject = new GraphQLObjectType({
+export const UserId = new GraphQLNonNull(UUIDType);
+
+export const UserObject: GraphQLObjectType = new GraphQLObjectType<unknown, Context>({
   name: SchemaTypeName.USER,
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(UUIDType),
+      type: UserId,
     },
     name: {
       type: new GraphQLNonNull(GraphQLString),
