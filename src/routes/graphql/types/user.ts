@@ -1,7 +1,5 @@
 import {
-  GraphQLBoolean,
   GraphQLFloat,
-  GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
@@ -9,27 +7,9 @@ import {
 } from 'graphql';
 import { SchemaTypeName } from '../constants.js';
 import { RequiredUUID } from './uuid.js';
-import { MemberTypeObject } from './member-type.js';
 import { PostObject } from './post.js';
 import { Context } from './context.js';
-
-export const ProfileObject = new GraphQLObjectType({
-  name: SchemaTypeName.PROFILE,
-  fields: () => ({
-    id: {
-      type: RequiredUUID,
-    },
-    isMale: {
-      type: new GraphQLNonNull(GraphQLBoolean),
-    },
-    yearOfBirth: {
-      type: new GraphQLNonNull(GraphQLInt),
-    },
-    memberType: {
-      type: new GraphQLNonNull(MemberTypeObject),
-    },
-  }),
-});
+import { ProfileObject } from './profile.js';
 
 export const UserObject: GraphQLObjectType = new GraphQLObjectType<unknown, Context>({
   name: SchemaTypeName.USER,

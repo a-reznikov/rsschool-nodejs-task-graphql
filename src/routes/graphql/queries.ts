@@ -5,6 +5,7 @@ import { MemberId, MemberTypeObject } from './types/member-type.js';
 import { UserObject } from './types/user.js';
 import { RequiredUUID } from './types/uuid.js';
 import { PostObject } from './types/post.js';
+import { ProfileObject } from './types/profile.js';
 
 export const rootQuery = new GraphQLObjectType<unknown, Context>({
   name: SchemaTypeName.ROOT_QUERY_TYPE,
@@ -58,6 +59,24 @@ export const rootQuery = new GraphQLObjectType<unknown, Context>({
       },
       resolve: async (_source, { id }: { id: string }, ctx) =>
         await ctx.prisma.post.findUnique({
+          where: {
+            id,
+          },
+        }),
+    },
+    profiles: {
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ProfileObject))),
+      resolve: async (_source, _args, ctx) => await ctx.prisma.profile.findMany(),
+    },
+    profile: {
+      type: ProfileObject,
+      args: {
+        id: {
+          type: RequiredUUID,
+        },
+      },
+      resolve: async (_source, { id }: { id: string }, ctx) =>
+        await ctx.prisma.profile.findUnique({
           where: {
             id,
           },
