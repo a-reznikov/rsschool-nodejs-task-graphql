@@ -10,8 +10,12 @@ import { RequiredUUID } from './uuid.js';
 import { PostObject } from './post.js';
 import { Context } from './context.js';
 import { ProfileObject } from './profile.js';
+import { userSchema } from '../../users/schemas.js';
+import { Static } from '@sinclair/typebox';
 
-export const UserObject: GraphQLObjectType = new GraphQLObjectType<unknown, Context>({
+export type UserProps = Static<typeof userSchema>;
+
+export const UserObject: GraphQLObjectType = new GraphQLObjectType<UserProps, Context>({
   name: SchemaTypeName.USER,
   fields: () => ({
     id: {
@@ -25,15 +29,53 @@ export const UserObject: GraphQLObjectType = new GraphQLObjectType<unknown, Cont
     },
     profile: {
       type: ProfileObject,
+      resolve: async ({ id }, _args, ctx) =>
+        await ctx.prisma.profile.findUnique({
+          where: {
+            userId: id,
+          },
+        }),
     },
-    post: {
+    posts: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(PostObject))),
+      resolve: async ({ id }, _args, ctx) =>
+        await ctx.prisma.post.findMany({
+          where: {
+            authorId: {
+              equals: id,
+            },
+          },
+        }),
     },
     userSubscribedTo: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(UserObject))),
+      resolve: async ({ id }, _args, ctx) =>
+        await ctx.prisma.user.findMany({
+          where: {
+            subscribedToUser: {
+              some: {
+                subscriberId: {
+                  equals: id,
+                },
+              },
+            },
+          },
+        }),
     },
     subscribedToUser: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(UserObject))),
+      resolve: async ({ id }, _args, ctx) =>
+        await ctx.prisma.user.findMany({
+          where: {
+            userSubscribedTo: {
+              some: {
+                authorId: {
+                  equals: id,
+                },
+              },
+            },
+          },
+        }),
     },
   }),
 });
