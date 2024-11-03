@@ -1,12 +1,12 @@
 import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { SchemaTypeName } from '../constants.js';
-import { UUIDType } from './uuid.js';
+import { RequiredUUID } from './uuid.js';
 
 export const PostObject = new GraphQLObjectType({
   name: SchemaTypeName.POST,
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(UUIDType),
+      type: RequiredUUID,
     },
     title: {
       type: new GraphQLNonNull(GraphQLString),

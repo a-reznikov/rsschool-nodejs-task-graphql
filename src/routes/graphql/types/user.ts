@@ -8,7 +8,7 @@ import {
   GraphQLString,
 } from 'graphql';
 import { SchemaTypeName } from '../constants.js';
-import { UUIDType } from './uuid.js';
+import { RequiredUUID } from './uuid.js';
 import { MemberTypeObject } from './member-type.js';
 import { PostObject } from './post.js';
 import { Context } from './context.js';
@@ -17,7 +17,7 @@ export const ProfileObject = new GraphQLObjectType({
   name: SchemaTypeName.PROFILE,
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(UUIDType),
+      type: RequiredUUID,
     },
     isMale: {
       type: new GraphQLNonNull(GraphQLBoolean),
@@ -31,13 +31,11 @@ export const ProfileObject = new GraphQLObjectType({
   }),
 });
 
-export const UserId = new GraphQLNonNull(UUIDType);
-
 export const UserObject: GraphQLObjectType = new GraphQLObjectType<unknown, Context>({
   name: SchemaTypeName.USER,
   fields: () => ({
     id: {
-      type: UserId,
+      type: RequiredUUID,
     },
     name: {
       type: new GraphQLNonNull(GraphQLString),

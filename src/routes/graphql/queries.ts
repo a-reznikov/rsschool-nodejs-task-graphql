@@ -2,7 +2,8 @@ import { GraphQLList, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { Context } from './types/context.js';
 import { SchemaTypeName } from './constants.js';
 import { MemberId, MemberTypeObject } from './types/member-type.js';
-import { UserId, UserObject } from './types/user.js';
+import { UserObject } from './types/user.js';
+import { RequiredUUID } from './types/uuid.js';
 
 export const rootQuery = new GraphQLObjectType<unknown, Context>({
   name: SchemaTypeName.ROOT_QUERY_TYPE,
@@ -33,7 +34,7 @@ export const rootQuery = new GraphQLObjectType<unknown, Context>({
       type: UserObject,
       args: {
         id: {
-          type: UserId,
+          type: RequiredUUID,
         },
       },
       resolve: async (_source, { id }: { id: string }, ctx) =>
