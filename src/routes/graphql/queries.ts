@@ -4,6 +4,7 @@ import { SchemaTypeName } from './constants.js';
 import { MemberId, MemberTypeObject } from './types/member-type.js';
 import { UserObject } from './types/user.js';
 import { RequiredUUID } from './types/uuid.js';
+import { PostObject } from './types/post.js';
 
 export const rootQuery = new GraphQLObjectType<unknown, Context>({
   name: SchemaTypeName.ROOT_QUERY_TYPE,
@@ -39,6 +40,24 @@ export const rootQuery = new GraphQLObjectType<unknown, Context>({
       },
       resolve: async (_source, { id }: { id: string }, ctx) =>
         await ctx.prisma.user.findUnique({
+          where: {
+            id,
+          },
+        }),
+    },
+    posts: {
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(PostObject))),
+      resolve: async (_source, _args, ctx) => await ctx.prisma.post.findMany(),
+    },
+    post: {
+      type: PostObject,
+      args: {
+        id: {
+          type: RequiredUUID,
+        },
+      },
+      resolve: async (_source, { id }: { id: string }, ctx) =>
+        await ctx.prisma.post.findUnique({
           where: {
             id,
           },
