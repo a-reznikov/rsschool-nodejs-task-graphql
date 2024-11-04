@@ -11,6 +11,14 @@ import {
   DTOPayloadCreateProfileInput,
   ProfileObject,
 } from './types/profile.js';
+import {
+  DTOChangePostInput,
+  DTOCreatePostInput,
+  DTOPayloadChangePostInput,
+  DTOPayloadCreatePostInput,
+  PostObject,
+} from './types/post.js';
+import { RequiredUUID } from './types/uuid.js';
 
 export const Mutations = new GraphQLObjectType<unknown, Context>({
   name: SchemaTypeName.MUTATIONS,
@@ -36,6 +44,40 @@ export const Mutations = new GraphQLObjectType<unknown, Context>({
       },
       resolve: async (_source, { dto }: { dto: DTOPayloadCreateProfileInput }, ctx) =>
         await ctx.prisma.profile.create({
+          data: dto,
+        }),
+    },
+    createPost: {
+      type: new GraphQLNonNull(PostObject),
+      args: {
+        dto: {
+          type: DTOCreatePostInput,
+        },
+      },
+      resolve: async (_source, { dto }: { dto: DTOPayloadCreatePostInput }, ctx) =>
+        await ctx.prisma.post.create({
+          data: dto,
+        }),
+    },
+    changePost: {
+      type: new GraphQLNonNull(PostObject),
+      args: {
+        id: {
+          type: RequiredUUID,
+        },
+        dto: {
+          type: DTOChangePostInput,
+        },
+      },
+      resolve: async (
+        _source,
+        { id, dto }: { id: string; dto: DTOPayloadChangePostInput },
+        ctx,
+      ) =>
+        await ctx.prisma.post.update({
+          where: {
+            id,
+          },
           data: dto,
         }),
     },
