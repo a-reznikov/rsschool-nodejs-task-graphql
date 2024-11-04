@@ -7,4 +7,5 @@ export enum SchemaTypeName {
   PROFILE = 'Profile',
   POST = 'Post',
   CREATE_USER_INPUT = 'CreateUserInput',
+  CREATE_PROFILE_INPUT = 'CreateProfileInput',
 }
