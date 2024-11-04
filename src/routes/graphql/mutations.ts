@@ -1,7 +1,9 @@
 import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { SchemaTypeName } from './constants.js';
 import {
+  DTOChangeUserInput,
   DTOCreateUserInput,
+  DTOPayloadChangeUserInput,
   DTOPayloadCreateUserInput,
   UserObject,
 } from './types/user.js';
@@ -99,6 +101,28 @@ export const Mutations = new GraphQLObjectType<unknown, Context>({
         ctx,
       ) =>
         await ctx.prisma.profile.update({
+          where: {
+            id,
+          },
+          data: dto,
+        }),
+    },
+    changeUser: {
+      type: new GraphQLNonNull(UserObject),
+      args: {
+        id: {
+          type: RequiredUUID,
+        },
+        dto: {
+          type: DTOChangeUserInput,
+        },
+      },
+      resolve: async (
+        _source,
+        { id, dto }: { id: string; dto: DTOPayloadChangeUserInput },
+        ctx,
+      ) =>
+        await ctx.prisma.user.update({
           where: {
             id,
           },

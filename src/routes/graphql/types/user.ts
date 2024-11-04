@@ -1,8 +1,10 @@
 import {
+  GraphQLFloat,
   GraphQLInputObjectType,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
+  GraphQLString,
 } from 'graphql';
 import { SchemaTypeName } from '../constants.js';
 import { RequiredUUID } from './uuid.js';
@@ -96,4 +98,22 @@ export const DTOCreateUserInput = new GraphQLNonNull(CreateUserInput);
 export type DTOPayloadCreateUserInput = {
   name: string;
   balance: number;
+};
+
+export const ChangeUserInput = new GraphQLInputObjectType({
+  name: SchemaTypeName.CHANGE_USER_INPUT,
+  fields: () => ({
+    name: {
+      type: GraphQLString,
+    },
+    balance: {
+      type: GraphQLFloat,
+    },
+  }),
+});
+
+export const DTOChangeUserInput = new GraphQLNonNull(ChangeUserInput);
+export type DTOPayloadChangeUserInput = {
+  name?: string;
+  balance?: number;
 };
