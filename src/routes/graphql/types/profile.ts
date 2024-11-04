@@ -1,7 +1,13 @@
-import { GraphQLInputObjectType, GraphQLNonNull, GraphQLObjectType } from 'graphql';
+import {
+  GraphQLBoolean,
+  GraphQLInputObjectType,
+  GraphQLInt,
+  GraphQLNonNull,
+  GraphQLObjectType,
+} from 'graphql';
 import { SchemaTypeName } from '../constants.js';
 import { RequiredUUID } from './uuid.js';
-import { MemberId, MemberTypeObject } from './member-type.js';
+import { MemberId, MemberTypeIdEnum, MemberTypeObject } from './member-type.js';
 import { Context } from './context.js';
 import { profileSchema } from '../../profiles/schemas.js';
 import { Static } from '@sinclair/typebox';
@@ -62,4 +68,26 @@ export type DTOPayloadCreateProfileInput = {
   yearOfBirth: number;
   userId: string;
   memberTypeId: string;
+};
+
+export const ChangeProfileInput = new GraphQLInputObjectType({
+  name: SchemaTypeName.CHANGE_PROFILE_INPUT,
+  fields: () => ({
+    isMale: {
+      type: GraphQLBoolean,
+    },
+    yearOfBirth: {
+      type: GraphQLInt,
+    },
+    memberTypeId: {
+      type: MemberTypeIdEnum,
+    },
+  }),
+});
+
+export const DTOChangeProfileInput = new GraphQLNonNull(ChangeProfileInput);
+export type DTOPayloadChangeProfileInput = {
+  isMale?: boolean;
+  yearOfBirth?: number;
+  memberTypeId?: string;
 };

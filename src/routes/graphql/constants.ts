@@ -10,4 +10,5 @@ export enum SchemaTypeName {
   CREATE_PROFILE_INPUT = 'CreateProfileInput',
   CREATE_POST_INPUT = 'CreatePostInput',
   CHANGE_POST_INPUT = 'ChangePostInput',
+  CHANGE_PROFILE_INPUT = 'ChangeProfileInput',
 }

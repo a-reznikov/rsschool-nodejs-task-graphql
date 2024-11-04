@@ -7,7 +7,9 @@ import {
 } from './types/user.js';
 import { Context } from './types/context.js';
 import {
+  DTOChangeProfileInput,
   DTOCreateProfileInput,
+  DTOPayloadChangeProfileInput,
   DTOPayloadCreateProfileInput,
   ProfileObject,
 } from './types/profile.js';
@@ -75,6 +77,28 @@ export const Mutations = new GraphQLObjectType<unknown, Context>({
         ctx,
       ) =>
         await ctx.prisma.post.update({
+          where: {
+            id,
+          },
+          data: dto,
+        }),
+    },
+    changeProfile: {
+      type: new GraphQLNonNull(ProfileObject),
+      args: {
+        id: {
+          type: RequiredUUID,
+        },
+        dto: {
+          type: DTOChangeProfileInput,
+        },
+      },
+      resolve: async (
+        _source,
+        { id, dto }: { id: string; dto: DTOPayloadChangeProfileInput },
+        ctx,
+      ) =>
+        await ctx.prisma.profile.update({
           where: {
             id,
           },

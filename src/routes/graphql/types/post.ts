@@ -59,6 +59,6 @@ export const ChangePostInput = new GraphQLInputObjectType({
 
 export const DTOChangePostInput = new GraphQLNonNull(ChangePostInput);
 export type DTOPayloadChangePostInput = {
-  title: string | undefined;
-  content: string | undefined;
+  title?: string;
+  content?: string;
 };
