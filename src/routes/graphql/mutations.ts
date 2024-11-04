@@ -23,6 +23,7 @@ import {
   PostObject,
 } from './types/post.js';
 import { RequiredUUID } from './types/uuid.js';
+import { RequiredString } from './types/common.js';
 
 export const Mutations = new GraphQLObjectType<unknown, Context>({
   name: SchemaTypeName.MUTATIONS,
@@ -128,6 +129,57 @@ export const Mutations = new GraphQLObjectType<unknown, Context>({
           },
           data: dto,
         }),
+    },
+    deleteUser: {
+      type: RequiredString,
+      args: {
+        id: {
+          type: RequiredUUID,
+        },
+      },
+      resolve: async (_source, { id }: { id: string }, ctx) => {
+        await ctx.prisma.user.delete({
+          where: {
+            id,
+          },
+        });
+
+        return 'User has been deleted.';
+      },
+    },
+    deletePost: {
+      type: RequiredString,
+      args: {
+        id: {
+          type: RequiredUUID,
+        },
+      },
+      resolve: async (_source, { id }: { id: string }, ctx) => {
+        await ctx.prisma.post.delete({
+          where: {
+            id,
+          },
+        });
+
+        return 'Post has been deleted.';
+      },
+    },
+    deleteProfile: {
+      type: RequiredString,
+      args: {
+        id: {
+          type: RequiredUUID,
+        },
+      },
+      resolve: async (_source, { id }: { id: string }, ctx) => {
+        await ctx.prisma.profile.delete({
+          where: {
+            id,
+          },
+        });
+
+        return 'Profile has been deleted.';
+      },
     },
   }),
 });
