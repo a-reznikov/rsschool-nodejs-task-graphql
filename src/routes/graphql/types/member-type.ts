@@ -1,12 +1,7 @@
-import {
-  GraphQLEnumType,
-  GraphQLFloat,
-  GraphQLInt,
-  GraphQLNonNull,
-  GraphQLObjectType,
-} from 'graphql';
+import { GraphQLEnumType, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { SchemaTypeName } from '../constants.js';
 import { MemberTypeId } from '../../member-types/schemas.js';
+import { RequiredFloat, RequiredInt } from './common.js';
 
 export const MemberTypeIdEnum = new GraphQLEnumType({
   name: SchemaTypeName.MEMBER_TYPE_ID,
@@ -29,10 +24,10 @@ export const MemberTypeObject = new GraphQLObjectType({
       type: MemberId,
     },
     discount: {
-      type: new GraphQLNonNull(GraphQLFloat),
+      type: RequiredFloat,
     },
     postsLimitPerMonth: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: RequiredInt,
     },
   }),
 });

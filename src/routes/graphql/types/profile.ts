@@ -1,16 +1,11 @@
-import {
-  GraphQLBoolean,
-  GraphQLInputObjectType,
-  GraphQLInt,
-  GraphQLNonNull,
-  GraphQLObjectType,
-} from 'graphql';
+import { GraphQLInputObjectType, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { SchemaTypeName } from '../constants.js';
 import { RequiredUUID } from './uuid.js';
 import { MemberId, MemberTypeObject } from './member-type.js';
 import { Context } from './context.js';
 import { profileSchema } from '../../profiles/schemas.js';
 import { Static } from '@sinclair/typebox';
+import { RequiredBoolean, RequiredInt } from './common.js';
 
 export type ProfileProps = Static<typeof profileSchema>;
 
@@ -21,10 +16,10 @@ export const ProfileObject = new GraphQLObjectType<ProfileProps, Context>({
       type: RequiredUUID,
     },
     isMale: {
-      type: new GraphQLNonNull(GraphQLBoolean),
+      type: RequiredBoolean,
     },
     yearOfBirth: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: RequiredInt,
     },
     memberType: {
       type: new GraphQLNonNull(MemberTypeObject),
@@ -47,10 +42,10 @@ export const CreateProfileInput = new GraphQLInputObjectType({
   name: SchemaTypeName.CREATE_PROFILE_INPUT,
   fields: () => ({
     isMale: {
-      type: new GraphQLNonNull(GraphQLBoolean),
+      type: RequiredBoolean,
     },
     yearOfBirth: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: RequiredInt,
     },
     userId: {
       type: RequiredUUID,

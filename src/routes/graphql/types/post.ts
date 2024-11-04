@@ -1,6 +1,7 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLObjectType } from 'graphql';
 import { SchemaTypeName } from '../constants.js';
 import { RequiredUUID } from './uuid.js';
+import { RequiredString } from './common.js';
 
 export const PostObject = new GraphQLObjectType({
   name: SchemaTypeName.POST,
@@ -9,10 +10,10 @@ export const PostObject = new GraphQLObjectType({
       type: RequiredUUID,
     },
     title: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: RequiredString,
     },
     content: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: RequiredString,
     },
   }),
 });

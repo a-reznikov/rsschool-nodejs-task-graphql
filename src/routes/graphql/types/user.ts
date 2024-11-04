@@ -1,10 +1,8 @@
 import {
-  GraphQLFloat,
   GraphQLInputObjectType,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLString,
 } from 'graphql';
 import { SchemaTypeName } from '../constants.js';
 import { RequiredUUID } from './uuid.js';
@@ -13,6 +11,7 @@ import { Context } from './context.js';
 import { ProfileObject } from './profile.js';
 import { userSchema } from '../../users/schemas.js';
 import { Static } from '@sinclair/typebox';
+import { RequiredFloat, RequiredString } from './common.js';
 
 export type UserProps = Static<typeof userSchema>;
 
@@ -23,10 +22,10 @@ export const UserObject: GraphQLObjectType = new GraphQLObjectType<UserProps, Co
       type: RequiredUUID,
     },
     name: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: RequiredString,
     },
     balance: {
-      type: new GraphQLNonNull(GraphQLFloat),
+      type: RequiredFloat,
     },
     profile: {
       type: ProfileObject,
@@ -85,10 +84,10 @@ export const CreateUserInput = new GraphQLInputObjectType({
   name: SchemaTypeName.CREATE_USER_INPUT,
   fields: () => ({
     name: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: RequiredString,
     },
     balance: {
-      type: new GraphQLNonNull(GraphQLFloat),
+      type: RequiredFloat,
     },
   }),
 });
