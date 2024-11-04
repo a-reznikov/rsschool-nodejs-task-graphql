@@ -181,5 +181,63 @@ export const Mutations = new GraphQLObjectType<unknown, Context>({
         return 'Profile has been deleted.';
       },
     },
+    subscribeTo: {
+      type: RequiredString,
+      args: {
+        userId: {
+          type: RequiredUUID,
+        },
+        authorId: {
+          type: RequiredUUID,
+        },
+      },
+      resolve: async (
+        _source,
+        { userId, authorId }: { userId: string; authorId: string },
+        ctx,
+      ) => {
+        await ctx.prisma.user.update({
+          where: {
+            id: userId,
+          },
+          data: {
+            userSubscribedTo: {
+              create: {
+                authorId,
+              },
+            },
+          },
+        });
+
+        return 'User has been subscribed to author';
+      },
+    },
+    unsubscribeFrom: {
+      type: RequiredString,
+      args: {
+        userId: {
+          type: RequiredUUID,
+        },
+        authorId: {
+          type: RequiredUUID,
+        },
+      },
+      resolve: async (
+        _source,
+        { userId, authorId }: { userId: string; authorId: string },
+        ctx,
+      ) => {
+        await ctx.prisma.subscribersOnAuthors.delete({
+          where: {
+            subscriberId_authorId: {
+              subscriberId: userId,
+              authorId,
+            },
+          },
+        });
+
+        return 'User has been unsubscribed from author';
+      },
+    },
   }),
 });
