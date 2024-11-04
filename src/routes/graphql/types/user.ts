@@ -1,5 +1,6 @@
 import {
   GraphQLFloat,
+  GraphQLInputObjectType,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
@@ -79,3 +80,21 @@ export const UserObject: GraphQLObjectType = new GraphQLObjectType<UserProps, Co
     },
   }),
 });
+
+export const CreateUserInput = new GraphQLInputObjectType({
+  name: SchemaTypeName.CREATE_USER_INPUT,
+  fields: () => ({
+    name: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    balance: {
+      type: new GraphQLNonNull(GraphQLFloat),
+    },
+  }),
+});
+
+export const DTOCreateUserInput = new GraphQLNonNull(CreateUserInput);
+export type DTOPayloadCreateUserInput = {
+  name: string;
+  balance: number;
+};

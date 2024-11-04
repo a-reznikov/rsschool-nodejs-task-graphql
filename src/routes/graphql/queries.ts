@@ -7,7 +7,7 @@ import { RequiredUUID } from './types/uuid.js';
 import { PostObject } from './types/post.js';
 import { ProfileObject } from './types/profile.js';
 
-export const rootQuery = new GraphQLObjectType<unknown, Context>({
+export const RootQueryType = new GraphQLObjectType<unknown, Context>({
   name: SchemaTypeName.ROOT_QUERY_TYPE,
   fields: () => ({
     memberTypes: {
